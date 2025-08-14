@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block title %}Catálogo{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1 class="mb-2">Prendas</h1>
+
+  <!-- Filtros -->
+  <form method="get" class="filters">
+    <input type="text" name="q" value="{{ q }}" placeholder="Buscar por nombre o color">
+    <select name="cat">
+      <option value="">Todas</option>
+      {% for c in categorias %}
+        <option value="{{ c.id }}" {% if cat|stringformat:"s" == c.id|stringformat:"s" %}selected{% endif %}>
+          {{ c.nombre }}
+        </option>
+      {% endfor %}
+    </select>
+    <select name="order">
+      <option value="recientes"   {% if order == 'recientes' %}selected{% endif %}>Más recientes</option>
+      <option value="precio_asc"  {% if order == 'precio_asc' %}selected{% endif %}>Precio ↑</option>
+      <option value="precio_desc" {% if order == 'precio_desc' %}selected{% endif %}>Precio ↓</option>
+    </select>
+    <button type="submit">Aplicar</button>
+    {% if q or cat or order != 'recientes' %}
+      <a href="{% url 'app_local_ropa:prenda_list' %}">Limpiar</a>
+    {% endif %}
+  </form>
+
+  {% if user.is_authenticated %}
+    <p class="mb-3"><a class="nt-btn" href="{% url 'app_local_ropa:prenda_create' %}">➕ Crear prenda</a></p>
+  {% endif %}
+
+  {% if prendas %}
+    <div class="grid">
+      {% for p in prendas %}
+        <article class="card">
+          {% if p.imagen %}
+            <img src="{{ p.imagen.url }}" alt="{{ p.nombre }}">
+          {% endif %}
+          <div class="body">
+            <span class="badge">
+              {% if p.categoria %}{{ p.categoria.nombre }}{% else %}Sin categoría{% endif %}
+            </span>
+            <h3 class="mt-1 mb-1" style="margin:0;">{{ p.nombre }}</h3>
+            <span class="muted">{{ p.color }}</span>
+            <span class="price">${{ p.precio }}</span>
+            <a class="mt-2" href="{% url 'app_local_ropa:prenda_detail' p.pk %}">Ver más</a>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+
+    {% if is_paginated %}
+      <div class="pagination">
+        {% if page_obj.has_previous %}
+          <a href="?q={{ q }}&cat={{ cat }}&order={{ order }}&page={{ page_obj.previous_page_number }}">Anterior</a>
+        {% endif %}
+        <span>Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+          <a href="?q={{ q }}&cat={{ cat }}&order={{ order }}&page={{ page_obj.next_page_number }}">Siguiente</a>
+        {% endif %}
+      </div>
+    {% endif %}
+  {% else %}
+    {% if q or cat %}
+      <p><em>No encontramos resultados para tu búsqueda.</em></p>
+    {% else %}
+      <p><em>No hay prendas aún.</em></p>
+    {% endif %}
+  {% endif %}
+</div>
+{% endblock %}

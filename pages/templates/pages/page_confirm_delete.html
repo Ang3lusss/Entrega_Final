@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Borrar página{% endblock %}
+{% block content %}
+<div class="container">
+  <h1>¿Borrar "{{ object.titulo }}"?</h1>
+  <form method="post">
+    {% csrf_token %}
+    <button class="nt-btn" type="submit">Confirmar</button>
+    <a class="nt-btn" href="{% url 'pages:page_list' %}">Cancelar</a>
+  </form>
+</div>
+{% endblock %}

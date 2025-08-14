@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}Not Today{% endblock %}</title>
+
+  <!-- CSS principal -->
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  <!-- Iconos (opcional) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  <!-- Fondo global + overlay -->
+  <div class="site-bg"></div>
+  <div class="site-overlay"></div>
+
+  <!-- NAVBAR -->
+<nav class="nt-navbar">
+  <div class="nt-left">
+      <a class="nt-brand" href="{% url 'pages:home' %}">Not Today</a>
+      <a href="{% url 'app_local_ropa:prenda_list' %}">Catálogo</a>
+      <a href="{% url 'pages:page_list' %}">Pages</a>
+      <a href="{% url 'pages:about' %}">Acerca de mí</a>
+
+  </div>
+
+  <div class="nt-right">
+    {% if user.is_authenticated %}
+      <a href="{% url 'accounts:profile' %}" class="user-info">
+        {% if user.profile and user.profile.avatar %}
+          <img src="{{ user.profile.avatar.url }}" alt="Avatar" class="avatar-icon">
+        {% else %}
+          <i class="fa fa-user-circle avatar-placeholder"></i>
+        {% endif %}
+        <span>{{ user.username }}</span>
+      </a>
+      <form method="post" action="{% url 'accounts:logout' %}" class="logout-form" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" class="nt-btn logout-btn">Salir</button>
+      </form>
+    {% else %}
+      <a href="{% url 'accounts:login' %}">Ingresar</a>
+      <a href="{% url 'accounts:signup' %}" class="nt-btn">Registrarse</a>
+    {% endif %}
+  </div>
+</nav>
+
+  <!-- HERO (si lo querés solo en Home, movelo a pages/home.html) -->
+  <header class="nt-hero">
+    <div class="nt-hero-inner">
+      <h1>Not Today</h1>
+      <p>Somos una marca de ropa y accesorios para los espíritus rebeldes y libres.</p>
+      <a class="nt-btn" href="{% url 'app_local_ropa:prenda_list' %}">Ver catálogo</a>
+    </div>
+  </header>
+
+  <!-- CONTENIDO -->
+  <main class="container">
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    {% block content %}{% endblock %}
+
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    © {% now "Y" %} Not Today — K-pop + softgoth
+  </footer>
+
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>

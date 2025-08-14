@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Editar Perfil{% endblock %}
+{% block content %}
+<div class="container">
+  <h1>Editar Perfil</h1>
+
+  <div style="display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap;">
+    <div>
+      {% if request.user.profile.avatar %}
+        <img src="{{ request.user.profile.avatar.url }}" alt="Avatar" style="width:120px; height:120px; object-fit:cover; border-radius:50%;">
+      {% endif %}
+      <p class="muted mt-1" style="font-size:13px;">Subí una imagen cuadrada para mejor resultado.</p>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" style="flex:1;">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="nt-btn">Guardar</button>
+    </form>
+  </div>
+
+  <p class="mt-2"><a href="{% url 'accounts:profile' %}">Volver al perfil</a></p>
+</div>
+{% endblock %}

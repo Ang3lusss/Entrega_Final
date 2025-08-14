@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Crear página{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1>Crear nueva página</h1>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="nt-btn">Guardar</button>
+    <a class="nt-btn" href="{% url 'pages:page_list' %}">Cancelar</a>
+  </form>
+
+  <p><a href="{% url 'pages:page_list' %}">Volver al listado</a></p>
+</div>
+{% endblock %}

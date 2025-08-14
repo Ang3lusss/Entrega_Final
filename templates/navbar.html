@@ -1,0 +1,29 @@
+<nav class="nt-navbar">
+  <div class="nt-left">
+    <a class="nt-brand" href="/">Not Today</a>
+    <a href="{% url 'pages:page_list' %}">Pages</a>
+    <a href="/prendas/">Catálogo</a>
+    <a href="{% url 'pages:about' %}">Acerca de mí</a>
+  </div>
+
+  <div class="nt-right">
+    {% if user.is_authenticated %}
+      <a href="{% url 'accounts:profile' %}" class="user-info">
+        {% if user.profile and user.profile.avatar %}
+          <img class="avatar-icon" src="{{ user.profile.avatar.url }}" alt="Avatar">
+        {% else %}
+          <img class="avatar-icon" src="{% static 'img/avatar-placeholder.svg' %}" alt="Avatar">
+        {% endif %}
+        <span>{{ user.username }}</span>
+      </a>
+
+      <form method="post" action="{% url 'accounts:logout' %}" class="logout-form">
+        {% csrf_token %}
+        <button type="submit" class="nt-linklike">Salir</button>
+      </form>
+    {% else %}
+      <a href="{% url 'accounts:login' %}">Ingresar</a>
+      <a href="{% url 'accounts:signup' %}" class="nt-btn">Registrarse</a>
+    {% endif %}
+  </div>
+</nav>

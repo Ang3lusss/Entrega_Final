@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}{{ accion }} Prenda{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1 class="mb-2">{{ accion }} Prenda</h1>
+  <form method="post" enctype="multipart/form-data" class="mb-3">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="nt-btn">Guardar</button>
+  </form>
+  <p><a href="{% url 'app_local_ropa:prenda_list' %}" class="nt-btn">Volver al listado</a></p>
+</div>
+{% endblock %}

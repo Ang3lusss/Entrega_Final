@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}{{ prenda.nombre }}{% endblock %}
+
+{% block content %}
+<div class="container prenda-detail">
+  <div class="prenda-header mb-3">
+    <h1 style="margin:0;">
+      {{ prenda.nombre }}
+      <span class="badge">
+        {% if prenda.categoria %}{{ prenda.categoria.nombre }}{% else %}Sin categoría{% endif %}
+      </span>
+    </h1>
+    <span class="muted">Color: {{ prenda.color }}</span>
+  </div>
+
+  <p class="price" style="font-size:20px;">${{ prenda.precio }}</p>
+
+  {% if prenda.imagen %}
+    <img src="{{ prenda.imagen.url }}" alt="{{ prenda.nombre }}">
+  {% endif %}
+
+  <div class="mt-3">
+    {{ prenda.descripcion|safe }}
+  </div>
+
+  <p class="muted mt-2">Publicada: {{ prenda.fecha_publicacion|date:"d/m/Y H:i" }}</p>
+
+  {% if user.is_authenticated %}
+    <p class="mt-2">
+      <a href="{% url 'app_local_ropa:prenda_update' prenda.pk %}">✏️ Editar</a> |
+      <a href="{% url 'app_local_ropa:prenda_delete' prenda.pk %}">🗑️ Borrar</a>
+    </p>
+  {% endif %}
+</div>
+{% endblock %}

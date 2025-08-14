@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Borrar Prenda{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1>¿Borrar "{{ object }}"?</h1>
+  <form method="post" class="mt-2">
+    {% csrf_token %}
+    <button type="submit" class="nt-btn">Sí, borrar</button>
+    <a href="{% url 'app_local_ropa:prenda_detail' object.pk %}">Cancelar</a>
+  </form>
+</div>
+{% endblock %}
